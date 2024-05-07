@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://localjs.zohostatic.com/creator/widgets/version/1.0/widgetsdk-min.js"></script>
+    <meta charset="UTF-8" />
+  </head>
+
+  <body>
+    <button onclick="getFileContent()">GET FILE CONTENT</button>
+    <button onclick="getSubformFileContent()">GET SUBFORM FILE CONTENT</button>
+    <button onclick="setImageData()">SET IMAGE DATA</button>
+    <p id="fileContent"></p>
+    <img id="image" />
+  </body>
+
+  <script>
+    const APP_NAME = "test-app";
+    const REPORT_NAME = "All_Forms";
+
+    function getFileContent() {
+      ZOHO.CREATOR.init().then(function () {
+          const downObj = {
+            appName: APP_NAME,
+            reportName: REPORT_NAME,
+            fieldName: "File_upload",
+            id: "2000000000550"
+          };
+          ZOHO.CREATOR.API.readFile(downObj).then(function (response) {
+            console.log(response);
+            document.getElementById("fileContent").innerHTML = response;
+          });
+        });
+    }
+
+    function getSubformFileContent() {
+      ZOHO.CREATOR.init().then(function () {
+        const recObj = {
+          appName: APP_NAME,
+          reportName: REPORT_NAME
+        };
+
+        ZOHO.CREATOR.API.getAllRecords(recObj).then(function (response) {
+          const downObj = {
+            appName: APP_NAME,
+            reportName: REPORT_NAME,
+            fieldName: "SUB_FILE.TEXT",
+            id: response.data[0].SUB_FILE[0].ID,
+            parentId: response.data[0].ID
+          };
+          ZOHO.CREATOR.API.readFile(downObj).then(function (response) {
+            console.log(response);
+            document.getElementById("fileContent").innerHTML = response;
+          });
+        });
+      });
+    }
+
+    function setImageData() {
+      ZOHO.CREATOR.init().then(function () {
+        const recObj = {
+          appName: APP_NAME,
+          reportName: REPORT_NAME
+        };
+
+        ZOHO.CREATOR.API.getAllRecords(recObj).then(function (response) {
+          ZOHO.CREATOR.UTIL.setImageData(
+            document.getElementById("image"),
+            response.data[0].image,
+            function() {
+              console.log("Image Got Set!");
+            }
+          );
+        });
+      });
+    }
+  </script>
+</html>
