@@ -10,7 +10,7 @@
     <button onclick="getSubformFileContent()">GET SUBFORM FILE CONTENT</button>
     <button onclick="setImageData()">SET IMAGE DATA</button>
     <p id="fileContent"></p>
-    <img id="image" />
+    <iframe id="image"></iframe>
   </body>
 
   <script>
@@ -65,7 +65,7 @@
         ZOHO.CREATOR.API.getAllRecords(recObj).then(function (response) {
           ZOHO.CREATOR.UTIL.setImageData(
             document.getElementById("image"),
-            response.data[0].image,
+            response.data[0].File_upload,
             function() {
               console.log("Image Got Set!");
             }
